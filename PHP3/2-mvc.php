@@ -22,6 +22,7 @@
         $db = new PDO('mysql:host=127.0.0.1;dbname=formation_php;charset=UTF8', 'root', '');
         $userManager = new UserManager($db);
         $users = $userManager->getByNameAndBirthday($name, $birthday);
+
     }
 
     /**

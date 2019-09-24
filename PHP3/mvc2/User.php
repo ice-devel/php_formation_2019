@@ -39,6 +39,7 @@ class User
         //$this->name = $name;
         
         $this->setName($name);
+        $this->setCreatedAt(new DateTime());
     }
 
     /*
