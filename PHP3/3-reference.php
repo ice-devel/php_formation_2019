@@ -98,4 +98,57 @@ $string2 = $string;
 $string2 = "coucou";
 echo $string."<br>";
 echo $string2."<br>";
+$string3 = "bonjour";
+
+// comparaison
+if ($string == $string2) { // faux
+    // bonjour n'est pas égal à coucou
+}
+if ($string === $string2) { // faux
+    // bonjour n'est pas égal à coucou même si le type string est égal au type string
+}
+if ($string == $string3) {
+
+}
+
+$test = new Test();
+$test->setName('jean');
+$test2 = new Test();
+$test2->setName('jean');
+
+// opérateur de comparaison sur les objets vérifier que les deux variables
+// sont du même type objet, et que toutes leurs propriétés aient les mêmes valeurs
+if ($test == $test2) { // vrai
+    echo "jean == jean";
+}
+
+$test = new Test();
+$test->setName('victor');
+$test2 = new Test();
+$test2->setName('jean');
+
+if ($test == $test2) { // vrai
+    echo "victor == jean";
+}
+
+// opérateur de comparaison strict : teste si la référence (l'id) de deux objets
+// est la même (donc que nous avons à faire au même objet représenté par deux noms
+// différents de variable)
+$test = new Test();
+$test->setName('jean');
+$test2 = new Test();
+$test2->setName('jean');
+
+if ($test === $test2) { // faux
+
+}
+
+$test = new Test();
+$test->setName('jean');
+$test2 = $test;
+
+if ($test === $test2) { // vrai
+
+}
+
 ?>
