@@ -1,10 +1,11 @@
 <?php
+include "entity/Product.php";
 include "entity/ProductManager.php";
 
-$db = "quelquechose";
+$db = new PDO('mysql:host=127.0.0.1;dbname=formation_php;charset=UTF8', 'root', '');
 $productManager = new ProductManager($db);
 $products = $productManager->findAll();
-// controller
-include "templates/product_list.html";
+
+include "templates/product_list.php";
 
 ?>

@@ -54,6 +54,9 @@ class Product
      */
     public function setCreatedAt($createdAt)
     {
+        if (! $createdAt instanceof DateTime) {
+            $createdAt = new DateTime($createdAt);
+        }
         $this->createdAt = $createdAt;
     }
 
@@ -118,6 +121,13 @@ class Product
      */
     public function setIsOnline($isOnline)
     {
+        if ($isOnline === null || $isOnline === 0) {
+            $isOnline = false;
+        }
+        else {
+            $isOnline = true;
+        }
+
         $this->isOnline = $isOnline;
     }
 
