@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        table td {
+            border:1px solid;
+        }
+    </style>
+</head>
+<body>
+    {# on affiche une variable passée depuis un controller avec les doubles {{ }} #}
+    Bonjour le template dynamique {{ nowChaine }}
+    <br>
+    <br>
+    Date dynamique crée par une fonction twig : {{ 'now' | date('d/m/Y H:i:s') }}
+
+    {#
+        les structures conditionnelles et itératives sont possibles
+        en twig avec if/elseif/else et for
+    #}
+    <table>
+    {% for user in users %}
+        {% if user != "toto" %}
+            <tr>
+                <td>{{ user }}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </table>
+</body>
+</html>

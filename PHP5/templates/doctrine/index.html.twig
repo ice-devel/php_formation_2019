@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DoctrineController!{% endblock %}
+
+{% block body %}
+    {#
+    en twig on peut appeler directement les propriétés privées
+    car en réalité twig test plusieurs choses
+Elle vérifie si objet est un tableau, et si attribut en est un index valide. Si c'est le cas, elle affiche objet['attribut'].
+Sinon, et si objetest un objet, elle vérifie si attribut en est un attribut valide (public donc). Si c'est le cas, elle affiche objet->attribut.
+Sinon, et si objetest un objet, elle vérifie si attribut() en est une méthode valide (publique donc). Si c'est le cas, elle afficheobjet->attribut().
+Sinon, et si objetest un objet, elle vérifie si getAttribut() en est une méthode valide. Si c'est le cas, elle affich eobjet->getAttribut().
+Sinon, et si objetest un objet, elle vérifie si isAttribut() en est une méthode valide. Si c'est le cas, elle affiche objet->isAttribut().
+Sinon, erreur.
+    #}
+
+    {{ article.title }}<br>
+    {{ article.getDescription() }}<br>
+    {% if article.getIsOnline() %}
+        En ligne<br>
+    {% else %}
+        Hors-ligne<br>
+    {% endif %}
+    {{ article.getCreatedAt() | date('d/m/Y H:i') }}
+{% endblock %}
