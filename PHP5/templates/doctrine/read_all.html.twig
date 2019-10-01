@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DoctrineController!{% endblock %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Titre</th>
+            <th>Créé le</th>
+            <th>Etat</th>
+            <th>Actions</th>
+        </tr>
+    {% for article in articles %}
+        <tr>
+            <td>{{ article.id }}</td>
+            <td>{{ article.title }}</td>
+            <td>{{ article.createdAt | date('d/m/Y') }}</td>
+            <td>{% if article.isOnline %}En ligne{% else %}Hors-ligne{% endif %}</td>
+            {#
+                générer une url : fonction path() en twig :
+                prend 1 paramètre obligatoire : le nom ("name") de la route
+                et le deuxième à remplir seulement si la route a des paramètres dynamiques
+            #}
+            <td><a href="{{ path('doctrine_read', {'id': article.id}) }}">Lire</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

@@ -50,11 +50,11 @@ class DoctrineController extends AbstractController
     }
 
     /**
-     * @Route("/doctrine/read", name="doctrine_read")
+     * @Route("/doctrine/read/{id}", name="doctrine_read")
      */
-    public function read() {
+    public function read($id) {
         $em = $this->getDoctrine()->getManager();
-        $article = $em->getRepository('App:Article')->find(4);
+        $article = $em->getRepository('App:Article')->find($id);
 
         // générer une 404 si aucun article en base ne correspond
         if ($article == null) {
@@ -65,12 +65,12 @@ class DoctrineController extends AbstractController
     }
 
     /**
-     * @Route("/doctrine/update", name="doctrine_update")
+     * @Route("/doctrine/update/{id}", name="doctrine_update")
      */
-    public function update() {
+    public function update($id) {
         // 1- récupérer l'objet
         $em = $this->getDoctrine()->getManager();
-        $article = $em->getRepository('App:Article')->find(1);
+        $article = $em->getRepository('App:Article')->find($id);
 
         // générer une 404 si aucun article en base ne correspond
         if ($article == null) {
@@ -89,12 +89,12 @@ class DoctrineController extends AbstractController
     }
 
     /**
-     * @Route("/doctrine/delete", name="doctrine_delete")
+     * @Route("/doctrine/delete/{id}", name="doctrine_delete")
      */
-    public function delete() {
+    public function delete($id) {
         // 1- récupérer l'objet
         $em = $this->getDoctrine()->getManager();
-        $article = $em->getRepository('App:Article')->find(1);
+        $article = $em->getRepository('App:Article')->find($id);
 
         // générer une 404 si aucun article en base ne correspond
         if ($article == null) {
@@ -108,5 +108,15 @@ class DoctrineController extends AbstractController
         $em->flush();
 
         return new Response("Article bien supprimé");
+    }
+
+    /**
+     * @Route("/doctrine/read-all", name="doctrine_read_all")
+     */
+    public function readAll() {
+        $em = $this->getDoctrine()->getManager();
+        $articles = $em->getRepository('App:Article')->findAll();
+
+        return $this->render('doctrine/read_all.html.twig', ['articles' => $articles]);
     }
 }

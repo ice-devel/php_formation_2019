@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    {{ user.id }}<br>
+    {{ user.name }}<br>
+    {{ user.email }}<br>
+    {{ user.birthday | date('d/m/Y') }}<br>
+    {{ user.points }}<br>
+    {{ user.createdAt | date('d/m/Y H:i') }}<br>
+    {% if user.isEnabled %}Compte activé{% else %}Compte désactivé{% endif %}
+{% endblock %}
