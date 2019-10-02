@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    <h1>Ici le formulaire de {% if user.id == null %}création{% else %}modification{% endif %} de User</h1>
+
+    <style>
+    </style>
+    {# afficher le formulaire en une seule fonction #}
+    {# {{ form(formUser) }} #}
+
+    {# afficher les champs du formulaire un par un #}
+    {#
+    {{ form_start(formUser) }}
+        <div id="input_name">
+            {{ form_row(formUser.name, {'label': 'Nom'}) }}
+        </div>
+
+        {{ form_row(formUser.birthday) }}
+        {{ form_row(formUser.isEnabled) }}
+        {{ form_row(formUser.email) }}
+        {{ form_row(formUser.points) }}
+    {{ form_end(formUser) }}
+    #}
+    {{ form_errors(formUser.name) }}
+
+    {# découpe par champs en dissociant label, widget, error #}
+    {{ form_start(formUser) }}
+
+        {{ form_widget(formUser.name, {'attr': {'placeholder': 'Veuillez saisir votre nom'}}) }}
+        {{ form_label(formUser.name, 'Nom') }}
+
+
+        {{ form_row(formUser.birthday, {'attr': {'class': 'date'}}) }}
+
+        {{ form_label(formUser.isEnabled) }}
+        {{ form_widget(formUser.isEnabled) }}
+
+        {{ form_row(formUser.email) }}
+        {{ form_row(formUser.points) }}
+
+        {#
+            tous les champs n'ayant pas été affiché auparavant seront automatiquement
+            affichés à la fin du formulaire
+            ! : si un seul élément a été affiché (label, ou widget ou error),
+            le champ est considéré comme affiché, donc les deux autres éléments n'apparaitront pas
+        #}
+    {{ form_end(formUser) }}
+{% endblock %}

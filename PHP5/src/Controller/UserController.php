@@ -3,81 +3,92 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\User1Type;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/user")
+ */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user/create", name="user_create")
+     * @Route("/", name="user_index", methods={"GET"})
      */
-    public function create()
+    public function index(UserRepository $userRepository): Response
+    {
+        return $this->render('user/index.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/new", name="user_new", methods={"GET","POST"})
+     */
+    public function new(Request $request): Response
     {
         $user = new User();
-        $user->setName("toto");
-        $user->setPoints(150);
-        $user->setBirthday(new \DateTime("2019-08-08"));
-        $user->setEmail("fab@mail.fr");
-        $user->setIsEnabled(false);
+        $form = $this->createForm(User1Type::class, $user);
+        $form->handleRequest($request);
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-        return $this->render('user/index.html.twig', ['user' => $user]);
+            return $this->redirectToRoute('user_index');
+        }
+
+        return $this->render('user/new.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
-     * @Route("/user/read/{id}", name="user_read")
+     * @Route("/{id}", name="user_show", methods={"GET"})
      */
-    public function read($id)
+    public function show(User $user): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('App:User')->find($id);
-
-        if ($user == null) {
-            throw new NotFoundHttpException();
-        }
-
-        return $this->render('user/index.html.twig', ['user' => $user]);
+        return $this->render('user/show.html.twig', [
+            'user' => $user,
+        ]);
     }
 
     /**
-     * @Route("/user/update/{id}", name="user_update")
+     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
-    public function update($id)
+    public function edit(Request $request, User $user): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('App:User')->find($id);
+        $form = $this->createForm(User1Type::class, $user);
+        $form->handleRequest($request);
 
-        if ($user == null) {
-            throw new NotFoundHttpException();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('user_index');
         }
 
-        $user->setEmail("newmail@coucou.fr");
-
-        $em->flush();
-
-        return $this->render('user/index.html.twig', ['user' => $user]);
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
-     * @Route("/user/delete/{id}", name="user_delete")
+     * @Route("/{id}", name="user_delete", methods={"DELETE"})
      */
-    public function delete($id)
+    public function delete(Request $request, User $user): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('App:User')->find($id);
-
-        if ($user == null) {
-            throw new NotFoundHttpException();
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
         }
 
-        $em->remove($user);
-        $em->flush();
-
-        return new Response("User supprimé");
+        return $this->redirectToRoute('user_index');
     }
 }

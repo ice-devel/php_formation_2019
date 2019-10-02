@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity("email")
  */
 class User
 {
@@ -18,6 +21,13 @@ class User
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotNull(message="Veuillez saisir un nom")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "Saisissez au minimum {{ limit }} caractères",
+     *      maxMessage = "Saisissez au maximum {{ limit }} caractères"
+     * )
      */
     private $name;
 
@@ -27,7 +37,7 @@ class User
     private $email;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $birthday;
 

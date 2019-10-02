@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    <h1>Ici le formulaire de création de User si on avait pas symfony</h1>
+
+    <form action="" method="post">
+        Nom : <input type="text" name="name"/><br>
+        Email : <input type="email" name="email"/><br>
+        Date de naissance : <input type="text" name="birthday"/><br>
+        <input type="submit" name="btn_create_user"/>
+    </form>
+{% endblock %}
