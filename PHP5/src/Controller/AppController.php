@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,6 +14,18 @@ class AppController extends AbstractController
      */
     public function index()
     {
+        $title = "Hello salut les loulous ! hééé";
+
+        /*
+        $util = new Util();
+        $clean = $util->slugify($title);
+        */
+
+        /*
+        $util = $this->container->get('app.util');
+        $clean = $util->slugify($title);
+        */
+
         $response = $this->render('app/index.html.twig', [
             'controller_name' => 'AppController',
         ]);
