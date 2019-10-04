@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fight{% endblock %}
+
+{% block body %}
+    {% if character1 is not null %}
+        <div style="display:inline-block;width:49%;border:1px solid;">
+            {{ character1.name }}<br>
+            Force: {{ character1.strength }}<br>
+            Santé: {{ character1.health }}<br>
+            Armure: {{ character1.armor }}<br>
+            Description: {{ character1.description }}<br>
+
+            <a href="{{ path('attack', {'character1Id': character1.id, 'character2Id': character2.id}) }}">Attaquer</a>
+            <a href="{{ path('heal', {'characterId': character1.id}) }}">Se soigner</a>
+        </div>
+
+        <div style="display:inline-block;width:49%;border:1px solid;">
+            {{ character2.name }}<br>
+            Force: {{ character2.strength }}<br>
+            Santé: {{ character2.health }}<br>
+            Armure: {{ character2.armor }}<br>
+            Description: {{ character2.description }}<br>
+
+            <a href="{{ path('attack', {'character1Id': character2.id, 'character2Id': character1.id}) }}">Attaquer</a>
+            <a href="{{ path('heal', {'characterId': character2.id}) }}">Se soigner</a>
+        </div>
+    {% endif %}
+{% endblock %}
