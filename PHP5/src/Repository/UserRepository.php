@@ -47,4 +47,29 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findByNameOrEmailOrBirthday($name, $email, $birthday) {
+        $qb = $this->createQueryBuilder('u');
+        $qb->select('u')
+            ->where('u.name LIKE :name')
+            ->orWhere('u.email = :email')
+            ->orWhere('u.birthday <= :birthday')
+            ->setParameter('name', $name.'%')
+            ->setParameter('email', $email)
+            ->setParameter('birthday', $birthday)
+        ;
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+    public function countUsers() {
+        $qb = $this->createQueryBuilder('u');
+        $qb->select('COUNT(u)');
+        $query = $qb->getQuery();
+        // scalarResult : quand il n'y a qu'une seule colonne retournée par la requête
+        // singleScalarResult : quand il n'y a qu'une seule colonne retournée et un seul enregistrement par la requête
+        $nbUsers = $query->getSingleScalarResult();
+
+        return $nbUsers;
+    }
 }

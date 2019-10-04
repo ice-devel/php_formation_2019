@@ -15,7 +15,7 @@
         <tr>
             <td>{{ article.id }}</td>
             <td>{{ article.title }}</td>
-            <td>{{ article.createdAt | date('d/m/Y') }}</td>
+            <td>{{ article.createdAt | date('d/m/Y H:i:s') }}</td>
             <td>{% if article.isOnline %}En ligne{% else %}Hors-ligne{% endif %}</td>
             {#
                 générer une url : fonction path() en twig :
