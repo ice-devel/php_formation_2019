@@ -11,7 +11,7 @@
             Armure: {{ character1.armor }}<br>
             Description: {{ character1.description }}<br>
 
-            <a href="{{ path('attack', {'character1Id': character1.id, 'character2Id': character2.id}) }}">Attaquer</a>
+            <a id="btn_attack1" href="{{ path('attack', {'character1Id': character1.id, 'character2Id': character2.id}) }}">Attaquer</a>
             <a href="{{ path('heal', {'characterId': character1.id}) }}">Se soigner</a>
         </div>
 
@@ -26,4 +26,15 @@
             <a href="{{ path('heal', {'characterId': character2.id}) }}">Se soigner</a>
         </div>
     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('keypress', function(e) {
+            if (e.keyCode == 97) {
+                //document.querySelector('#btn_attack1').trigger('click');
+                // window.location = "{{ path('attack', {'character1Id': character1.id, 'character2Id': character2.id}) }}";
+            }
+        });
+    </script>
 {% endblock %}
