@@ -78,3 +78,114 @@ VII - doctrine (bdd)
 3- mettre à jour la base de données
     - php bin/console doctrine:schema:update --dump-sql
     - php bin/console doctrine:schema:update --force
+    
+VIII - générer des urls
+En twig : fonction path() avec deux paramètres :
+nom de la route et paramètres de la route
+
+Voir templates/doctrine/read_all.html.twig
+
+Exercice :
+Codez le CRUD pour des utilisateurs :
+    - créez 4 pages (route/controller/template)
+        - 1 page pour créer un utilisateur : crée un user puis l'affiche
+        - afficher : récupère un user puis l'affiche
+        - mettre à jour : modifie un user puis l'affiche
+        - supprimer : supprime un user + message confirmation ou 404
+Il faut gérer pour les utilisateurs :
+    - id
+    - nom (chaine)
+    - email (chaine)
+    - date de naissance (date)
+    - compte activé / désactivé
+    - date d'insertion en bdd
+    - points (entier)
+1- Génération de l'entité
+2- mise à jour de la base
+3- création du controller
+4- création des routes
+5- création des templates
+
+Correction : voir UserController.php
+
+IX - Les Formulaires
+"from scratch" on codait le formulaire html <form> puis on récupérait sur la page destination
+les données saisies, pour ensuite les contrôler et les envoyer en base
+Avec symfony, on a un composant "Form" qui va nous permettre de simplifier la tâche, et pourquoi pas de créer
+des formulaires réutilisables.
+
+On va donc générer un formulaire (c'est une classe), un FormType.
+Un FormType est associé à une entité en particulier.
+Commande pour générer un FormType :
+php bin/console make:form
+
+On peut ensuite utiliser dans nos controllers par exemple pour le crud.
+
+Si besoin, on peut carrément générer un crud entier (controller, templates, formtype)
+en ligne de commande :
+php bin/console make:crud
+
+On met les contraintes de validation sur les propriétés de l'entité elle-même :
+https://symfony.com/doc/current/reference/constraints.html
+Ainsi le $form->isValid() renverra faux si les valeurs possibles ne sont pas respectées
+
+X - les services
+
+XI - query builder
+Si les méthodes find, findAll, findBy, findOneBy ne suffisent pas,
+car le besoin est plus complexe, on va créer une "Query" nous-même grâce l'objet
+QueryBuilder.
+On peut avoir accès à ce queryBuilder dans un controller mais sa place se trouve
+dans les Repository correspondant : UserRepository pour l'entité User
+
+XII - Les transactions :
+Les transactions sont automatiques avec Doctrine, c'est à dire qu'on envoie vraiment toutes 
+requêtes demandées (avec persist, remove) avec un flush
+- START TRANSACTION;
+- requête 1
+- requête 2
+- requête 3
+
+- Si les trois requêtes renvoie vrai :
+- COMMIT;
+
+- Sinon on annule tout :
+- ROLLBACK;
+
+Doctrine détecte si la base supporte les transactions,
+et ne les utilise pas si ce n'est pas le cas
+
+XIII - associations entre entity :
+- oneToMany <=> manyToMany
+- oneToOne
+- manyToMany
+
+On peut générer ces associations également avec la commande :
+php bin/console make:entity
+Il suffit de saisir le nom de l'entité à modifier
+
+Par défaut, doctrine fait du lazy loading pour les entités :
+C'est à dire que lorsque vous récupérer un user, vous ne récupérez pas encore ses adresses.
+Mais dès que vous faites par exemple, $user->getAddresses(), doctrine déclenche automatiquement
+une requête SQL pour charger les entités Address correspondantes
+
+XIV - associations entre entity dans un formulaire :
+- manyToOne:
+    - sélectionner une entrée existante : il suffit de mettre le nom de la propriété, le formulaire sera chargé automatiquement
+avec les entités existantes en base
+    - créer une nouvelle : il faut un FormType "embbed" pour l'entité associée
+    
+- oneToMany:
+    - sélectionner une entrée existante : il suffit de mettre le nom de la propriété, le formulaire sera chargé automatiquement
+      avec les entités existantes en base (mais avec un select multiple)
+    - créer une nouvelle : il faut un FormType "embbed" pour l'entité associée
+    
+Attention :
+- pour l'ajout dans la collection, pensez à by_reference => false
+- pour la suppression : orphanRemoval dans l'annotation de l'entité
+
+XV - Cycles de vie d'une entité
+Doctrine déclenche des évenements lorsqu'elle travaille avec des entités
+- prePersist / postPersist
+- preUpdate / postUpdate
+- preRemove / postRemove

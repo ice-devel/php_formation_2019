@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\Article;
+use App\Entity\Team;
 use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -102,25 +103,77 @@ class AdvancedDoctrineController extends AbstractController
      * @Route("/associated-entities", name="associated_entities")
      */
     public function addNewUser() {
+        $em = $this->getDoctrine()->getManager();
+
         $user = new User();
         $user->setName('tata');
         $user->setEmail('tata@test.fr');
         $user->setBirthday(new \DateTime());
         $user->setIsEnabled(true);
 
+        // relation oneToMany : un user peut avoir plusieurs adresses
+        // adresse 1
         $address = new Address();
         $address->setZipcode("59000");
         $address->setCity("Lille");
         $address->setNumber("59");
         $address->setStreet("rue coucou");
-
+        // liaison avec le user
         $user->addAddress($address);
 
-        $em = $this->getDoctrine()->getManager();
+        // adresse 2
+        $address = new Address();
+        $address->setZipcode("62000");
+        $address->setCity("Arras");
+        $address->setNumber("32");
+        $address->setStreet("rue salut");
+        // liaison avec le user
+        $user->addAddress($address);
+
+        // relation manyToOne : un user a une seule équipe
+        // $team = new Team(); // on associe le user a une team existante
+        $team = $em->getRepository('App:Team')->find(1);
+
+        // associer la team à l'utilisateur
+        // $user->setTeam($team);
+        // préférez le addQuelquechose(), car la bidirectionnalité (setQuelquechose()) est codée dedans
+        // si vous avez utilisé le make:entity
+        $team->addUser($user);
+
         $em->persist($user);
-        $em->persist($address);
+
+        /**
+         * Pas besoin d'appeler un persist sur les adresses si et seulement si
+         * la relation oneToMany dans User a été configuré pour "persister"
+         * en cascade. Dans l'entité la configuration :
+         * OneToMany(targetEntity="App\Entity\Address", mappedBy="user", cascade={'all'})
+         *
+         */
+        //$em->persist($address);
+
+        // Valider la transaction : s'assure que tous les persist et remove
+        // précédent vont fonctionner. Si une seule requête n'est pas bonne,
+        // l'ensemble est annulé
+
         $em->flush();
 
-        return new Response(0);
+        // les id des nouvelles entités sont disponibles après avoir été persistée en bdd
+        // $user->getId() retournera le nouvel ID
+
+        return $this->render('advanced-doctrine/associated_entities.html.twig',
+            ['user' => $user]
+        );
+    }
+
+    /**
+     * @Route("/associated-entities/get-one-user", name="associated_entities_get_one_user")
+     */
+    public function getOneUser() {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('App:User')->find(23);
+
+        return $this->render('advanced-doctrine/associated_entities.html.twig',
+            ['user' => $user]
+        );
     }
 }

@@ -41,6 +41,11 @@ class Address
      */
     private $user;
 
+    public function __toString()
+    {
+        return $this->getNumber()." ".$this->getStreet()." ".$this->getStreet()." ".$this->getZipcode();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

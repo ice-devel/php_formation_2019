@@ -28,13 +28,13 @@
     /**
      * // on "instancie" un utilisateur, c'est à dire on crée une instance, un objet ($variable) dont le type
      * // est une classe d'objet
-     * $user = new User();
-     * $user->sayHello();
-     * $user->setName("toto"); // on passe par les mutateurs pour modifier une propriété
+     * $usertest = new User();
+     * $usertest->sayHello();
+     * $usertest->setName("toto"); // on passe par les mutateurs pour modifier une propriété
      *
      * une constance de classe étant relative à toute la classse et non à une instance en particulier
      * on y accède via le nom de la classe
-     * User::TYPE_FREE; // même si en PHP est autorisé $user::TYPE_FREE
+     * User::TYPE_FREE; // même si en PHP est autorisé $usertest::TYPE_FREE
      */
 
 

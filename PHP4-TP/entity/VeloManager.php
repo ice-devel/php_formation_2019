@@ -67,7 +67,13 @@ class VeloManager
         $sql = "INSERT INTO velo(created_at, name, price, size, suspension, frame)
                 VALUES (:created_at, :name, :price, :size, :suspension, :frame)";
         $statement = $this->db->prepare($sql);
-        return $statement->execute($params);
+        $result = $statement->execute($params);
+
+        // récupérer l'id qu ivient d'être généré
+        $lastId = $this->db->lastInsertId();
+        $velo->setId($lastId);
+
+        return $result;
     }
 
     public function find($id) {

@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("email")
  */
 class User
@@ -54,14 +55,25 @@ class User
     private $createdAt;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $points;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user", cascade={"all"}, orphanRemoval=true)
+     *
      */
     private $addresses;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="users")
+     */
+    private $team;
 
     public function __construct()
     {
@@ -134,6 +146,19 @@ class User
         return $this;
     }
 
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
     public function getPoints(): ?int
     {
         return $this->points;
@@ -175,5 +200,69 @@ class User
         }
 
         return $this;
+    }
+
+    public function getTeam(): ?Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Team $team): self
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
+    /*
+     * Cyclede l'entité : lifecycle
+     */
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function postPersist()
+    {
+
+    }
+
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * @ORM\PostUpdate()
+     */
+    public function postUpdate()
+    {
+
+    }
+
+    /**
+     * @ORM\PreRemove()
+     */
+    public function preRemove()
+    {
+
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function postRemove()
+    {
+
     }
 }

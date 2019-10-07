@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Association entre entités{% endblock %}
+
+{% block body %}
+    User :<br>
+    {{ user.id }}<br>
+    {{ user.name }}<br>
+    {{ user.email }}<br>
+    <br>
+
+    Adresses :<br>
+    {% for address in user.addresses %}
+        {{ address.number }} {{ address.street }}<br>
+        {{ address.zipcode }} {{ address.city }}<br>
+        <br>
+    {% endfor %}
+
+    Team :<br>
+    {% if user.team is not null %}
+        {{ user.team.name }}<br>
+    {% endif %}
+{% endblock %}
