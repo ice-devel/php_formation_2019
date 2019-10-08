@@ -215,7 +215,7 @@ class User
     }
 
     /*
-     * Cyclede l'entité : lifecycle
+     * Cycle de vie de l'entité : lifecycle callbacks
      */
 
     /**

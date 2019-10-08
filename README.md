@@ -130,6 +130,7 @@ https://symfony.com/doc/current/reference/constraints.html
 Ainsi le $form->isValid() renverra faux si les valeurs possibles ne sont pas respectées
 
 X - les services
+Voir XVI
 
 XI - query builder
 Si les méthodes find, findAll, findBy, findOneBy ne suffisent pas,
@@ -189,3 +190,28 @@ Doctrine déclenche des évenements lorsqu'elle travaille avec des entités
 - prePersist / postPersist
 - preUpdate / postUpdate
 - preRemove / postRemove
+
+XVI - services
+Un service est une classe déclaré en tant que service. Un service remplit une fonction particulière
+qu'on va centraliser dans une classe pour décharger les controllers, et pouvoir aussi les 
+réutiliser.
+    - Décharger les controllers
+    - Un service peut être dans les controllers ou dans d'autres services :
+       on n'a plus besoin d'instancier les objets ni d'importer le namespace
+    - On peut injecter des services dans des services
+    - On peut ajouter des configurations particulières :
+        - écouter des événements et exécuter automatiquement le service
+        - passer d'autres services dans le constructeur
+    - Une classe est instanciée une seule fois, la seconde où on a besoin du service, la première instance
+        est réutilisé
+        
+XVII - Exo
+-Créer un controller pour afficher une page qui dit bonjour (route/controller/template)
+-Prefixer ce controller pour que toutes les urls des routes commencent par /bonjour/
+-Protéger cette page avec un firewall
+-Protéger cette page pour que seul les utilisateurs avec le ROLE_BONJOUR puisse l'afficher
+-Vous indiquez quel est le formulaire pour s'y connecter
+-Vous créez la route pour afficher ce formulaire de connexion
+-La route pour attraper les infos de formulaire de connexion (login_check)
+-Créer l'utilisateur "bonjour" avec le mot de passe "bonjour" et le role ROLE_BONJOUR
+

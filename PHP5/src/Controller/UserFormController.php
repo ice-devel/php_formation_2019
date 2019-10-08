@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserFormController extends AbstractController
 {
     /**
-     * @Route("/userform/create", name="user_form_create")
+     * @Route("/create", name="user_form_create")
      */
     public function create(Request $request)
     {
@@ -58,7 +58,7 @@ class UserFormController extends AbstractController
     }
 
     /**
-     * @Route("/userform/create-old", name="user_form_create_old")
+     * @Route("/create-old", name="user_form_create_old")
      */
     public function createOld(Request $request)
     {
@@ -101,7 +101,7 @@ class UserFormController extends AbstractController
     }
 
     /**
-     * @Route("/userform/update/{id}", name="user_form_update")
+     * @Route("/update/{id}", name="user_form_update")
      */
     public function update(Request $request, $id)
     {

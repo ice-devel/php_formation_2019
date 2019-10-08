@@ -13,7 +13,7 @@ class AppController extends AbstractController
     /**
      * @Route("/", name="app")
      */
-    public function index()
+    public function index(Util $util)
     {
         $title = "Hello salut les loulous ! hééé";
 
@@ -26,6 +26,12 @@ class AppController extends AbstractController
         $util = $this->container->get('app.util');
         $clean = $util->slugify($title);
         */
+
+        /* ça, pas besoin de le faire, le container de service le fait pour nous:
+            $router = $this->container->get('router');
+            $util = new Util($router);
+        */
+        $util->generateUrl();
 
         $response = $this->render('app/index.html.twig', [
             'controller_name' => 'AppController',

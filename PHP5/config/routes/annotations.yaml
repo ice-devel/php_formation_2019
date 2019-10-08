@@ -1,3 +1,14 @@
 controllers:
   resource: ../../src/Controller/
   type: annotation
+
+userform_routes:
+  resource: ../../src/Controller/UserFormController.php
+  type: annotation
+  prefix: userform
+
+security_routes:
+  resource: ../../src/Controller/SecurityController.php
+  type: annotation
+  prefix: userform
+

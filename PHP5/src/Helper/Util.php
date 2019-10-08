@@ -1,8 +1,17 @@
 <?php
 namespace App\Helper;
 
+use Symfony\Component\Routing\RouterInterface;
+
 class Util
 {
+    private $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
+
     public function slugify($string, $delimiter='-') {
         $oldLocale = setlocale(LC_ALL, '0');
         setlocale(LC_ALL, 'en_US.UTF-8');
@@ -14,5 +23,10 @@ class Util
         setlocale(LC_ALL, $oldLocale);
 
         return $clean;
+    }
+
+    public function generateUrl() {
+        $url = $this->router->generate('user_form_create');
+        var_dump($url);exit;
     }
 }

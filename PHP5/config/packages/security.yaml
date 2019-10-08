@@ -1,11 +1,47 @@
 security:
+    encoders:
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 12
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    # ici on des providers d'utilisateurs : les "groupes" d'utilisateurs qui peuvent se connecter
+    # sur les firewall, et on définira ensuite firewall par firewall quel groupe peut se connecter
     providers:
-        in_memory: { memory: null }
+        in_memory:
+            memory:
+                users:
+                    admin_pouet: { password: '$2y$12$bNeIcSln3l18cmj7JKyyhekY32d.4qgFqWcmFSTV5yWa/6XKLQdiK', roles: ['ROLE_ADMIN_USER'] }
+
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_TEST]
+        ROLE_ADMIN: ROLE_ADMIN_USER
+        ROLE_ADMIN_USER: ROLE_USER
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        # créer un firewall qui va sécuriser une ou plusieurs pages
+        # nom du firewall à votre convenance
+        admin:
+            pattern: ^/userform/
+            anonymous: true
+            # quel est le formulaire qui permet de se connecter à ce firewall
+            form_login:
+                # quels sont les utilisateurs qui ont le droit
+                # de se connecter via ce formulaire
+                provider: in_memory
+                # url vers laquelle on redirige si on est pas connecté
+                login_path:  /userform/login
+                # page à laquelle symfony doit récupérer des identifiants
+                # la route login_check doit matcher avec le pattern du firewall
+                check_path:  /userform/login_check
+                default_target_path: /userform/create
+                csrf_token_generator: security.csrf.token_manager
+            logout:
+                path:   /userform/logout
+                target: /userform/login
+
         main:
             anonymous: true
 
@@ -20,3 +56,6 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: /userform/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: /userform/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/userform/, roles: ROLE_ADMIN_USER }
