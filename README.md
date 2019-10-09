@@ -16,6 +16,12 @@ Comme tous les autres composants qu'on viendra greffer à une appli symfony
 Installer PHP et mettre en variable environnement
 Installer Composer et mettre variable environnement
 lancer : composer create-project symfony/website-skeleton project_name
+configurer l'accès bdd dans le .env (.env.local ou directement dans le vhost)
+
+II bis : clonage d'un projet existant
+`git clone {{URL}}`
+Puis se positionner à la racine du projet puis installer les vendor (qui ne sont pas versionnés) :
+`php composer update`
 
 III - Architecture
 Architecture Symfony 4
@@ -37,9 +43,9 @@ Lancer des commandes développées avec symfony.
 Un tas de commandes par défaut pour nous faciliter la tâche (des commandes pour
  la base de données, pour les controllers, pour les entités, etc.)
  
- Par exemple lançons :
- php bin/console make:controller
- pour générer un controller automatiquement
+Par exemple lançons :
+ `php bin/console make:controller`
+pour générer un controller automatiquement
  
 V - création d'un site vhost
 a- Dans le fichier hosts de votre OS, créer un domaine qui pointe vers 127.0.0.1
@@ -48,20 +54,22 @@ Avec xampp par exemple, ajouter le vhost dans apache/conf/extra/httpd-vhost.conf
 c- redémarrer apache
 
 Par exemple :
-<VirtualHost *:80>
-    ServerName formation-symfony.dev
-    ServerAlias www.formation-symfony.dev
 
-    DocumentRoot "C:/xampp/htdocs/PHP/PHP5/public"
-    <Directory "C:/xampp/htdocs/PHP/PHP5/public">
-        AllowOverride All
-        Order Allow,Deny
-        Allow from All
-    </Directory>
+    <VirtualHost *:80>
+        ServerName formation-symfony.dev
+        ServerAlias www.formation-symfony.dev
+    
+        DocumentRoot "C:/xampp/htdocs/PHP/PHP5/public"
+        <Directory "C:/xampp/htdocs/PHP/PHP5/public">
+            AllowOverride All
+            Order Allow,Deny
+            Allow from All
+        </Directory>
+    
+        ErrorLog "C:/logs/apache2/formation_symfony_error.log"
+        CustomLog "C:/logs/apache2/formation_symfony_access.log" combined
+    </VirtualHost>
 
-    ErrorLog "C:/logs/apache2/formation_symfony_error.log"
-    CustomLog "C:/logs/apache2/formation_symfony_access.log" combined
-</VirtualHost>
 
 VI - création d'une page
 1 - route : l'url de la page
@@ -72,12 +80,12 @@ https://sdz-upload.s3.amazonaws.com/prod/upload/routeur_1.png
 VII - doctrine (bdd)
 1- créer la base :
     - on configure la variable DATABASE_URL dans .env
-    - php bin/console doctrine:database:create
+    - `php bin/console doctrine:database:create`
 2- générer vos entités (ou créer les manuellement)
-    - php bin/console make:entity
+    - `php bin/console make:entity`
 3- mettre à jour la base de données
-    - php bin/console doctrine:schema:update --dump-sql
-    - php bin/console doctrine:schema:update --force
+    - `php bin/console doctrine:schema:update --dump-sql`
+    - `php bin/console doctrine:schema:update --force`
     
 VIII - générer des urls
 En twig : fonction path() avec deux paramètres :
@@ -117,13 +125,13 @@ des formulaires réutilisables.
 On va donc générer un formulaire (c'est une classe), un FormType.
 Un FormType est associé à une entité en particulier.
 Commande pour générer un FormType :
-php bin/console make:form
+`php bin/console make:form`
 
 On peut ensuite utiliser dans nos controllers par exemple pour le crud.
 
 Si besoin, on peut carrément générer un crud entier (controller, templates, formtype)
 en ligne de commande :
-php bin/console make:crud
+`php bin/console make:crud`
 
 On met les contraintes de validation sur les propriétés de l'entité elle-même :
 https://symfony.com/doc/current/reference/constraints.html
@@ -206,12 +214,26 @@ réutiliser.
         est réutilisé
         
 XVII - Exo
--Créer un controller pour afficher une page qui dit bonjour (route/controller/template)
--Prefixer ce controller pour que toutes les urls des routes commencent par /bonjour/
+-Créer un controller pour afficher une page
+qui dit bonjour (route/controller/template)
+
+-Prefixer ce controller pour que toutes les
+urls des routes commencent par /bonjour/
+
 -Protéger cette page avec un firewall
--Protéger cette page pour que seul les utilisateurs avec le ROLE_BONJOUR puisse l'afficher
--Vous indiquez quel est le formulaire pour s'y connecter
--Vous créez la route pour afficher ce formulaire de connexion
--La route pour attraper les infos de formulaire de connexion (login_check)
--Créer l'utilisateur "bonjour" avec le mot de passe "bonjour" et le role ROLE_BONJOUR
+
+-Protéger cette page pour que seuls les utilisateurs
+ avec le ROLE_BONJOUR puisse l'afficher
+
+-Vous indiquez quel est le formulaire pour s'y 
+connecter (et y autoriser les anonymes)
+
+-Vous créez la route pour afficher ce formulaire 
+de connexion
+
+-La route pour attraper les infos de formulaire 
+de connexion (login_check) (et y autoriser les anonymes)
+
+-Créer l'utilisateur in_memory "bonjour" avec 
+le mot de passe "bonjour" et le role ROLE_BONJOUR
 
