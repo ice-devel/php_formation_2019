@@ -255,13 +255,19 @@ DKIM : protection supplémentaire avec clé privée/clé publique
 XIX : upload de fichier :
 
 https://symfony.com/doc/current/controller/upload_file.html
+
 1- Ajouter une propriété string à votre entité à laquelle vous voulez un fichier
+
 2- Ajouter dans le FormType de cette entité un champ non mappé pour obtenir un input type=file dans votre formulaire
 3- Créer un service d'upload de fichier
+
 4- dans le controller, quand le formulaire est soumis récupérer la data correspondant au file, pour la
 passer à votre service de fichier
+
 5- settez dans votre entité le nom de fichier unique généré
+
 6- affichez ce fichier image dans twig avec :
+
 `<img src="{{ asset('uploads/' ~ user.photoFilename) }}" alt=""/>`
 
 Vous pouvez placer les uploads dans le dossier public si ce sont des fichiers qui peuvent
