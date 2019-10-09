@@ -7,7 +7,7 @@ class Util
 {
     private $router;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(RouterInterface $router=null)
     {
         $this->router = $router;
     }
