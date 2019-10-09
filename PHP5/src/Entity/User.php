@@ -65,6 +65,11 @@ class User
     private $points;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $photoFilename;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user", cascade={"all"}, orphanRemoval=true)
      *
      */
@@ -213,6 +218,24 @@ class User
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPhotoFilename()
+    {
+        return $this->photoFilename;
+    }
+
+    /**
+     * @param mixed $photoFilename
+     */
+    public function setPhotoFilename($photoFilename): void
+    {
+        $this->photoFilename = $photoFilename;
+    }
+
+
 
     /*
      * Cycle de vie de l'entité : lifecycle callbacks

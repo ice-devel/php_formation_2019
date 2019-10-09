@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Helper\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -15,7 +17,7 @@ class UserFormController extends AbstractController
     /**
      * @Route("/create", name="user_form_create")
      */
-    public function create(Request $request)
+    public function create(Request $request, FileUploader $fileUploader)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -37,6 +39,17 @@ class UserFormController extends AbstractController
         if ($form->isSubmitted()) {
             // 5- on checke si le formulaire est valide
             if ($form->isValid()) {
+                // uploader la photo
+                /** @var UploadedFile $brochureFile */
+                $photoFile = $form['photo']->getData();
+
+                // on upload que si un fichier a été sélectionné dans le formulaire
+                if ($photoFile) {
+                    $photoFilename = $fileUploader->upload($photoFile);
+                    // stocker dans le user le nom de fichier unique généré pour la photo
+                    $user->setPhotoFilename($photoFilename);
+                }
+
                 $em->persist($user);
                 $em->flush();
                 // message flash : message en session destiné à n'être affiché qu'une seule fois

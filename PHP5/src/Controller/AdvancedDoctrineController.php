@@ -170,7 +170,7 @@ class AdvancedDoctrineController extends AbstractController
      */
     public function getOneUser() {
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('App:User')->find(23);
+        $user = $em->getRepository('App:User')->find(26);
 
         return $this->render('advanced-doctrine/associated_entities.html.twig',
             ['user' => $user]

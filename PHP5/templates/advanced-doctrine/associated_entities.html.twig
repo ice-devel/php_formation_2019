@@ -20,4 +20,9 @@
     {% if user.team is not null %}
         {{ user.team.name }}<br>
     {% endif %}
+
+    Photo :<br>
+    {% if user.photoFilename is not null %}
+        <img src="{{ asset('uploads/' ~ user.photoFilename) }}" alt=""/>
+    {% endif %}
 {% endblock %}
